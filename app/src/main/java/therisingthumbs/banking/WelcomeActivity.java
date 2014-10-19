@@ -3,7 +3,9 @@ package therisingthumbs.banking;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,8 +17,12 @@ import android.os.Build;
 
 public class WelcomeActivity extends Activity {
 
+    int screenWidth, screenHeight; //vars to hold the size of the screen
+    boolean isPortrait; //bool used to check if in portrait or landscape
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         if (savedInstanceState == null) {
@@ -24,6 +30,27 @@ public class WelcomeActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        /**
+         * Get the screen size and check if in portrait or landscape mode
+         */
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        if (screenWidth <= screenHeight)
+        {
+            isPortrait = true;
+        }
+        else
+            isPortrait = false;
+
+        /**
+         * Set position of buttons based on
+         * portrait or landscape
+         */
+        //TODO: Responsive design
 
         /**
          * This will hide the action bar.
@@ -78,5 +105,13 @@ public class WelcomeActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
             return rootView;
         }
+    }
+
+    /**
+     * Function to start the LogInPage activity
+     */
+    public void startLogInActivity(View view)
+    {
+        
     }
 }
