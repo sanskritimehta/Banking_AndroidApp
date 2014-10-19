@@ -112,6 +112,6 @@ public class WelcomeActivity extends Activity {
      */
     public void startLogInActivity(View view)
     {
-        
+
     }
 }
