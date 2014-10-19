@@ -37,10 +37,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="43b8c445-43dd-4d49-92fc-e63fee6a3902" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\dhart_000\AndroidStudioProjects\Banking\.gitignore.swp" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/therisingthumbs/banking/WelcomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/therisingthumbs/banking/WelcomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_welcome.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_welcome.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore.swp" afterPath="$PROJECT_DIR$/.gitignore.swp" />
     </list>
     <ignored path="Banking.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -76,7 +73,7 @@
       <file leaf-file-name="WelcomeActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/therisingthumbs/banking/WelcomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8648649" vertical-offset="1394" max-vertical-offset="2091">
+            <state vertical-scroll-proportion="1.3513514" vertical-offset="1088" max-vertical-offset="2091">
               <caret line="114" column="8" selection-start-line="114" selection-start-column="8" selection-end-line="114" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -1527,7 +1524,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/therisingthumbs/banking/WelcomeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8648649" vertical-offset="1394" max-vertical-offset="2091">
+        <state vertical-scroll-proportion="1.3513514" vertical-offset="1088" max-vertical-offset="2091">
           <caret line="114" column="8" selection-start-line="114" selection-start-column="8" selection-end-line="114" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
