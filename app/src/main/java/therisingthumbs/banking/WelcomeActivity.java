@@ -3,6 +3,7 @@ package therisingthumbs.banking;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
@@ -108,10 +109,28 @@ public class WelcomeActivity extends Activity {
     }
 
     /**
-     * Function to start the LogInPage activity
+     * Function to start the LogIn activity
      */
     public void startLogInActivity(View view)
     {
+        /**
+         * create an intent used to start the LogIn activity
+         * No data is needed to transfer to this activity
+         */
+        Intent intent  = new Intent(this, LogIn.class);
+        startActivity(intent);
+    }
 
+    /**
+     * Function to start the SignUp activity
+     */
+    public void startSignUpActivity(View view)
+    {
+        /**
+         * Create an intent used to start the SignUp activity
+         * No data is needed to transfer to this activity
+         */
+        Intent intent  = new Intent(this, SignUp.class);
+        startActivity(intent);
     }
 }
