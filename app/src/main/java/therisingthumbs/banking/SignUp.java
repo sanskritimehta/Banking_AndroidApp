@@ -10,7 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.EditText;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SignUp extends Activity {
@@ -69,5 +72,70 @@ public class SignUp extends Activity {
     public void SignUpAttempt(View view)
     {
         System.err.println("SIGN UP ATTEMPT!");
+
+        EditText first_name = (EditText) findViewById(R.id.first_name);
+        EditText last_name = (EditText) findViewById(R.id.last_name);
+        EditText email = (EditText) findViewById(R.id.email);
+        EditText pass = (EditText) findViewById(R.id.pass);
+        EditText pass_confirm = (EditText) findViewById(R.id.pass_confirm);
+
+        //check if all fields are non-empty
+        if (!isEmpty(first_name) &&
+            !isEmpty(last_name) &&
+            !isEmpty(email) &&
+            !isEmpty(pass) &&
+            !isEmpty(pass_confirm))
+        {
+            System.err.println("All values non empty");
+
+            //check for valid email
+            if (emailValidator(email.getText().toString())) {
+                //check passwords match
+                if (pass.getText().toString().equals(pass_confirm.getText().toString())) {
+                    //passwords match
+                    System.err.println("pass match!\nCheck Parse for user");
+
+                    // Check parse database to see if user exists (by email)
+                    // if does not, create new object. otherwise show error message
+
+                }
+                else
+                {
+                    //TODO error passwords don't match
+                }
+
+            }
+            else
+            {
+                //TODO not valid email format
+            }
+
+        }//end empty string check
+        else
+        {
+            //TODO empty field(s)
+        }
     }
+
+    protected boolean isEmpty(EditText t)
+    {
+        if(t.getText().toString().trim().length() == 0)
+            return true;
+        return false;
+
+    }
+    /**
+     * validate your email address format. Ex-akhi@mani.com
+     */
+    public boolean emailValidator(String email)
+    {
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\." +
+                "                      [A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
 }

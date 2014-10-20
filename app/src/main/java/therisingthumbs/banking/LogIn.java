@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-
+import android.widget.EditText;
 
 
 public class LogIn extends Activity {
@@ -68,6 +68,31 @@ public class LogIn extends Activity {
      */
     public void LogInAttempt(View view)
     {
-        System.err.println("LOG IN ATTEMPT!");
+        EditText email = (EditText) findViewById(R.id.email);
+        EditText pass = (EditText) findViewById(R.id.pass);
+
+        if(!isEmpty(email) && !isEmpty(pass))
+        {
+            System.err.println("LOG IN ATTEMPT!");
+            //check parse data base for email and password
+
+        }
+        else
+        {
+            //TODO handle error
+        }
+
+
+
     }
+
+    protected boolean isEmpty(EditText t)
+    {
+        if(t.getText().toString().trim().length() == 0)
+            return true;
+        return false;
+
+    }
+
+
 }

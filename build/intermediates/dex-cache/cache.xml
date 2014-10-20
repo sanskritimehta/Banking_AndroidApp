@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="C:\Users\dhart_000\AndroidStudioProjects\Banking\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.3-ec0127866d03816b26c23c1403bcc90728c22725.jar"
+        jar="C:\Users\dhart_000\AndroidStudioProjects\Banking\app\libs\bolts-android-1.1.3.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e61e3dfc57eaa5c97f9e7061db5608fc7d02d39e"/>
+    <item
+        dex="C:\Users\dhart_000\AndroidStudioProjects\Banking\app\build\intermediates\pre-dexed\debug\Parse-1.7.1-ef31f3b0eb92ca2fa29c0725f969d7b45eaf4c92.jar"
+        jar="C:\Users\dhart_000\AndroidStudioProjects\Banking\app\libs\Parse-1.7.1.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="87c45f9f66da531a65f065ee32f603c7e6db1528"/>
+
+</pre-dex-items>

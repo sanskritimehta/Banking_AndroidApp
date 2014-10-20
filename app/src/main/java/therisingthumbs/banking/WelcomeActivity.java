@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
-
+import com.parse.ParseObject;
 
 
 public class WelcomeActivity extends Activity {
@@ -25,6 +25,15 @@ public class WelcomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // connect to parse
+        Parse.initialize(this, "fVmX21jyCA3B7ffHgU8RCJQJCls6x9wJBSdx5KHY",
+                               "RxrZt3ldrgG0xilRZHrIZe5ViQQqC1OcxBl33DlK");
+
+        // create a test parse object
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
