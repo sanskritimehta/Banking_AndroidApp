@@ -2,6 +2,7 @@
 *.apk
 # Built application files
 /*/build/
+build/intermediates/model_data.bin
  
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
