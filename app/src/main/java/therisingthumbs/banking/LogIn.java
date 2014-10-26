@@ -3,6 +3,7 @@ package therisingthumbs.banking;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 
 public class LogIn extends Activity {
@@ -68,14 +75,41 @@ public class LogIn extends Activity {
      */
     public void LogInAttempt(View view)
     {
-        EditText email = (EditText) findViewById(R.id.email);
-        EditText pass = (EditText) findViewById(R.id.pass);
+        final EditText email = (EditText) findViewById(R.id.email);
+        final EditText pass = (EditText) findViewById(R.id.pass);
+        final TextView errMsg = (TextView) findViewById(R.id.errMsg);
 
         if(!isEmpty(email) && !isEmpty(pass))
         {
             System.err.println("LOG IN ATTEMPT!");
             //check parse data base for email and password
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+            query.whereEqualTo("email", email.getText().toString());
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (e == null) {
+                        //user exists, access home page
+                        String userName = parseObject.getString("first_name") + " " +
+                                          parseObject.getString("last_name");
 
+                        String passWord = parseObject.getString ("pass");
+                        if (passWord.equals(pass.getText().toString())) {
+                            System.err.println("user: " + userName + " exists!");
+
+
+                        } else {
+                            errMsg.setText("Invalid password!");
+                            errMsg.setTextColor(Color.RED);
+                        }
+
+
+
+                    } else {
+                        errMsg.setText("Email does not exist");
+                        errMsg.setTextColor(Color.RED);
+                    }
+                }
+            });
         }
         else
         {
@@ -96,3 +130,5 @@ public class LogIn extends Activity {
 
 
 }
+
+

@@ -3,6 +3,7 @@ package therisingthumbs.banking;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +36,10 @@ public class SignUp extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        // connect to parse
+        Parse.initialize(this, "fVmX21jyCA3B7ffHgU8RCJQJCls6x9wJBSdx5KHY",
+                                "RxrZt3ldrgG0xilRZHrIZe5ViQQqC1OcxBl33DlK");
     }
 
 
@@ -73,11 +86,12 @@ public class SignUp extends Activity {
     {
         System.err.println("SIGN UP ATTEMPT!");
 
-        EditText first_name = (EditText) findViewById(R.id.first_name);
-        EditText last_name = (EditText) findViewById(R.id.last_name);
-        EditText email = (EditText) findViewById(R.id.email);
-        EditText pass = (EditText) findViewById(R.id.pass);
-        EditText pass_confirm = (EditText) findViewById(R.id.pass_confirm);
+        final EditText first_name = (EditText) findViewById(R.id.first_name);
+        final EditText last_name = (EditText) findViewById(R.id.last_name);
+        final EditText email = (EditText) findViewById(R.id.email);
+        final EditText pass = (EditText) findViewById(R.id.pass);
+        final EditText pass_confirm = (EditText) findViewById(R.id.pass_confirm);
+        final TextView err = (TextView) findViewById(R.id.errMsg);
 
         //check if all fields are non-empty
         if (!isEmpty(first_name) &&
@@ -98,22 +112,65 @@ public class SignUp extends Activity {
                     // Check parse database to see if user exists (by email)
                     // if does not, create new object. otherwise show error message
 
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+                    query.whereEqualTo("email", email.getText().toString());
+                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                        public void done(ParseObject parseObject, ParseException e) {
+                            if (e == null) {
+                                //User already exists
+                                String userName = parseObject.getString("first_name");
+                                System.err.println("NAME: " + userName);
+                                err.setText(parseObject.getString("email") + " already exists!");
+                                err.setTextColor(Color.RED);
+
+                                /**
+                                 * TODO
+                                 * add alert dialog to the user prompting them if
+                                 * they want to access the log in page
+                                 * GOAL: allow user to simply click "yes" to log in passing
+                                 * their information to the log in activity and attempt to log in.
+                                 */
+
+                            } else {
+                                //User does not exists, create account
+                                ParseObject user = new ParseObject("User");
+                                user.put("email", email.getText().toString());
+                                user.put("first_name", first_name.getText().toString());
+                                user.put("last_name", last_name.getText().toString());
+                                user.put("pass", pass.getText().toString());
+                                user.saveInBackground();
+
+                                /**
+                                 * TODO
+                                 * start new activity passing the created user parseObject
+                                 * if not possible, simply pass email and re fetch user
+                                 * in new activity
+                                 */
+                            }
+                        }
+                    });
                 }
                 else
                 {
-                    //TODO error passwords don't match
+                    //error passwords don't match
+                    err.setText("Passwords do not match!");
+                    err.setTextColor(Color.RED);
                 }
 
             }
             else
             {
-                //TODO not valid email format
+                //not valid email format
+                err.setText("Email not in valid format (example@example.com)");
+                err.setTextColor(Color.RED);
             }
 
         }//end empty string check
         else
         {
-            //TODO empty field(s)
+            // empty field(s)
+            err.setText("Missing information. ALL fields are required");
+            err.setTextColor(Color.RED);
         }
     }
 

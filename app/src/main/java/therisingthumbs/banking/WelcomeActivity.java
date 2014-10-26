@@ -30,11 +30,6 @@ public class WelcomeActivity extends Activity {
         Parse.initialize(this, "fVmX21jyCA3B7ffHgU8RCJQJCls6x9wJBSdx5KHY",
                                "RxrZt3ldrgG0xilRZHrIZe5ViQQqC1OcxBl33DlK");
 
-        // create a test parse object
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         if (savedInstanceState == null) {
