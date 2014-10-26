@@ -3,6 +3,7 @@ package therisingthumbs.banking;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import com.parse.ParseQuery;
 
 
 public class LogIn extends Activity {
+
+    public final static String EXTRA_MESSAGE = "therisingthumbs.banking.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,8 @@ public class LogIn extends Activity {
      */
     public void LogInAttempt(View view)
     {
+        final Intent intent = new Intent(this, HomePage.class);
+        final Bundle b = new Bundle();
         final EditText email = (EditText) findViewById(R.id.email);
         final EditText pass = (EditText) findViewById(R.id.pass);
         final TextView errMsg = (TextView) findViewById(R.id.errMsg);
@@ -96,6 +101,10 @@ public class LogIn extends Activity {
                         if (passWord.equals(pass.getText().toString())) {
                             System.err.println("user: " + userName + " exists!");
 
+                            String message = email.getText().toString();
+                            b.putString("email", message);
+                            intent.putExtra("Vyom", b);
+                            startActivity(intent);
 
                         } else {
                             errMsg.setText("Invalid password!");

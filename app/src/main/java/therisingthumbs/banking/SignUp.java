@@ -3,6 +3,7 @@ package therisingthumbs.banking;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -84,6 +85,7 @@ public class SignUp extends Activity {
      */
     public void SignUpAttempt(View view)
     {
+        final Intent intent = new Intent(this, HomePage.class);
         System.err.println("SIGN UP ATTEMPT!");
 
         final EditText first_name = (EditText) findViewById(R.id.first_name);
@@ -146,6 +148,9 @@ public class SignUp extends Activity {
                                  * if not possible, simply pass email and re fetch user
                                  * in new activity
                                  */
+                                String message = email.getText().toString();
+                                intent.putExtra("email", message);
+                                startActivity(intent);
                             }
                         }
                     });
