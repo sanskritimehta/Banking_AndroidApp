@@ -94,25 +94,18 @@ public class LogIn extends Activity {
                 public void done(ParseObject parseObject, ParseException e) {
                     if (e == null) {
                         //user exists, access home page
-                        String userName = parseObject.getString("first_name") + " " +
-                                          parseObject.getString("last_name");
-
+                        errMsg.setText("");
                         String passWord = parseObject.getString ("pass");
                         if (passWord.equals(pass.getText().toString())) {
-                            System.err.println("user: " + userName + " exists!");
-
                             String message = email.getText().toString();
                             b.putString("email", message);
-                            intent.putExtra("Vyom", b);
+                            intent.putExtra("homePage", b);
                             startActivity(intent);
 
                         } else {
                             errMsg.setText("Invalid password!");
                             errMsg.setTextColor(Color.RED);
                         }
-
-
-
                     } else {
                         errMsg.setText("Email does not exist");
                         errMsg.setTextColor(Color.RED);

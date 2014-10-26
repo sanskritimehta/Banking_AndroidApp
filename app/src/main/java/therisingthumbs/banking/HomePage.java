@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,10 +14,19 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.TextView;
 
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 
 public class HomePage extends Activity {
 
-    static String userEmail;
+    static String userEmail,
+                  userFirstName,
+                  userLastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +39,10 @@ public class HomePage extends Activity {
         }
 
         Intent intent = getIntent();
-        Bundle b = intent.getBundleExtra("Vyom");
+        Bundle b = intent.getBundleExtra("homePage");
         userEmail = b.getString("email");
 
-        System.err.println("EMAIL PASSED: " + userEmail);
+
     }
 
     @Override
@@ -65,10 +75,29 @@ public class HomePage extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home_page, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_home_page, container, false);
+            /**
+             * Initialize global (file scope) user information
+             */
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+            query.whereEqualTo("email", userEmail);
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (e == null) {
+                        userFirstName = parseObject.getString("first_name");
+                        userLastName = parseObject.getString("last_name");
+
+                        TextView text = (TextView) rootView.findViewById(R.id.userEmail);
+                        text.setText("Welcome, " + userFirstName);
+
+                    } else {
+                        // error reading parse database!
+                    }
+                }
+            });
 
             TextView text = (TextView) rootView.findViewById(R.id.userEmail);
-            text.setText("Welcome back, " + userEmail);
+            text.setText("Welcome, " + userFirstName);
 
             return rootView;
         }

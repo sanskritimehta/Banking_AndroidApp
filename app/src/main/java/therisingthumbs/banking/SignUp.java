@@ -86,6 +86,7 @@ public class SignUp extends Activity {
     public void SignUpAttempt(View view)
     {
         final Intent intent = new Intent(this, HomePage.class);
+        final Bundle b = new Bundle();
         System.err.println("SIGN UP ATTEMPT!");
 
         final EditText first_name = (EditText) findViewById(R.id.first_name);
@@ -134,6 +135,7 @@ public class SignUp extends Activity {
                                  */
 
                             } else {
+                                err.setText("");
                                 //User does not exists, create account
                                 ParseObject user = new ParseObject("User");
                                 user.put("email", email.getText().toString());
@@ -149,7 +151,8 @@ public class SignUp extends Activity {
                                  * in new activity
                                  */
                                 String message = email.getText().toString();
-                                intent.putExtra("email", message);
+                                b.putString("email", message);
+                                intent.putExtra("homePage", b);
                                 startActivity(intent);
                             }
                         }
