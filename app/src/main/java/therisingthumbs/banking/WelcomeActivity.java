@@ -26,6 +26,7 @@ public class WelcomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        ParseObject.registerSubclass(User.class);
         // connect to parse
         Parse.initialize(this, "fVmX21jyCA3B7ffHgU8RCJQJCls6x9wJBSdx5KHY",
                                "RxrZt3ldrgG0xilRZHrIZe5ViQQqC1OcxBl33DlK");

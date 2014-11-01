@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.SyncStateContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,6 +98,8 @@ public class SignUp extends Activity {
         final EditText pass_confirm = (EditText) findViewById(R.id.pass_confirm);
         final TextView err = (TextView) findViewById(R.id.errMsg);
 
+
+
         //check if all fields are non-empty
         if (!isEmpty(first_name) &&
             !isEmpty(last_name) &&
@@ -114,49 +118,28 @@ public class SignUp extends Activity {
 
                     // Check parse database to see if user exists (by email)
                     // if does not, create new object. otherwise show error message
+                    User u = new User( first_name.getText().toString(),
+                                       last_name.getText().toString(),
+                                       email.getText().toString(),
+                                       pass.getText().toString() );
+                    u.printData();
 
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-                    query.whereEqualTo("email", email.getText().toString());
-                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                        public void done(ParseObject parseObject, ParseException e) {
-                            if (e == null) {
-                                //User already exists
-                                String userName = parseObject.getString("first_name");
-                                System.err.println("NAME: " + userName);
-                                err.setText(parseObject.getString("email") + " already exists!");
-                                err.setTextColor(Color.RED);
+                    System.err.println("User in SignUp: " + u);
 
-                                /**
-                                 * TODO
-                                 * add alert dialog to the user prompting them if
-                                 * they want to access the log in page
-                                 * GOAL: allow user to simply click "yes" to log in passing
-                                 * their information to the log in activity and attempt to log in.
-                                 */
+                    String e = u.addToDatabase();
+                    if (e == null) {
+                        //Add successful! start new activity with user object
+                        ((myApplication) this.getApplication()).setUser(u);
+                        System.err.println("Add Successful!");
+                        b.putParcelable("user_object", u);
+                        intent.putExtras(b);
 
-                            } else {
-                                err.setText("");
-                                //User does not exists, create account
-                                ParseObject user = new ParseObject("User");
-                                user.put("email", email.getText().toString());
-                                user.put("first_name", first_name.getText().toString());
-                                user.put("last_name", last_name.getText().toString());
-                                user.put("pass", pass.getText().toString());
-                                user.saveInBackground();
+                        startActivity(intent);
+                    }
+                    else {
+                        err.setText(e);
+                    }
 
-                                /**
-                                 * TODO
-                                 * start new activity passing the created user parseObject
-                                 * if not possible, simply pass email and re fetch user
-                                 * in new activity
-                                 */
-                                String message = email.getText().toString();
-                                b.putString("email", message);
-                                intent.putExtra("homePage", b);
-                                startActivity(intent);
-                            }
-                        }
-                    });
                 }
                 else
                 {

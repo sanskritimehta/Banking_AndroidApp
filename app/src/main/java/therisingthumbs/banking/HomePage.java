@@ -27,6 +27,7 @@ public class HomePage extends Activity {
     static String userEmail,
                   userFirstName,
                   userLastName;
+    static User u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +39,23 @@ public class HomePage extends Activity {
                     .commit();
         }
 
-        Intent intent = getIntent();
-        Bundle b = intent.getBundleExtra("homePage");
-        userEmail = b.getString("email");
+        /*Intent intent = getIntent();
+        User user = (User) intent.getParcelableExtra("user_object");
+        if (user == null)
+           System.err.println("YA FUCKED UP");
+        else
+            System.err.println("well, maybe not");
 
+        userEmail = user.email;
+        userFirstName = user.firstName;
+        userLastName = user.lastName;
 
+        System.err.println("email passed: " + user);
+
+        user.printData();*/
+
+        u = ((myApplication) this.getApplication()).getUser();
+        System.err.println("HomePage: " + u);
     }
 
     @Override
@@ -97,7 +110,7 @@ public class HomePage extends Activity {
             });
 
             TextView text = (TextView) rootView.findViewById(R.id.userEmail);
-            text.setText("Welcome, " + userFirstName);
+            text.setText("Welcome, " + u.firstName);
 
             return rootView;
         }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -84,6 +85,8 @@ public class LogIn extends Activity {
         final EditText pass = (EditText) findViewById(R.id.pass);
         final TextView errMsg = (TextView) findViewById(R.id.errMsg);
 
+
+
         if(!isEmpty(email) && !isEmpty(pass))
         {
             System.err.println("LOG IN ATTEMPT!");
@@ -97,9 +100,11 @@ public class LogIn extends Activity {
                         errMsg.setText("");
                         String passWord = parseObject.getString ("pass");
                         if (passWord.equals(pass.getText().toString())) {
-                            String message = email.getText().toString();
-                            b.putString("email", message);
-                            intent.putExtra("homePage", b);
+                            User u = new User(parseObject.getString("first_name"),
+                                              parseObject.getString("last_name"),
+                                              parseObject.getString("email"),
+                                              parseObject.getString("pass"));
+                            ((myApplication) getApplication()).setUser(u);
                             startActivity(intent);
 
                         } else {
