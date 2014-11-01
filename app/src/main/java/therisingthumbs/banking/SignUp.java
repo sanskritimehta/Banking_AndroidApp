@@ -109,9 +109,12 @@ public class SignUp extends Activity {
         {
             System.err.println("All values non empty");
 
-            //check for valid email
-            if (emailValidator(email.getText().toString())) {
-                //check passwords match
+
+           //check for valid email and valid password
+           if ((emailValidator(email.getText().toString())) &&
+                        passwordValidator(pass.getText().toString())) {
+
+                    //check passwords match
                 if (pass.getText().toString().equals(pass_confirm.getText().toString())) {
                     //passwords match
                     System.err.println("pass match!\nCheck Parse for user");
@@ -183,6 +186,17 @@ public class SignUp extends Activity {
                 "                      [A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         pattern = Pattern.compile(EMAIL_PATTERN);
         matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public boolean passwordValidator(String pass)
+    {
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "((?=.*\\\\d)(?=.*[a-z])(?=.*[A-Z])" +
+                "(?=.*[@#$%]).{6,20})\";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(pass);
         return matcher.matches();
     }
 
