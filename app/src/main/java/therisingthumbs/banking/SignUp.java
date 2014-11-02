@@ -194,7 +194,7 @@ public class SignUp extends Activity {
         Pattern pattern;
         Matcher matcher;
         final String PASSWORD_PATTERN = "((?=.*\\\\d)(?=.*[a-z])(?=.*[A-Z])" +
-                "(?=.*[@#$%]).{6,20})\";
+                "(?=.*[@#$%]).{6,20})";
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(pass);
         return matcher.matches();
