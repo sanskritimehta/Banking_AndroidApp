@@ -44,6 +44,14 @@
             android:id="@+id/log_in_button"
             android:text="@string/log_in"
             android:onClick="LogInAttempt" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/errMsg"
+            android:padding="5dp"
+            android:textColor="#ff0000"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
 </RelativeLayout>

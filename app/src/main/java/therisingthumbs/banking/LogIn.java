@@ -3,6 +3,8 @@ package therisingthumbs.banking;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,10 +12,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 
 public class LogIn extends Activity {
+
+    public final static String EXTRA_MESSAGE = "therisingthumbs.banking.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +79,63 @@ public class LogIn extends Activity {
      */
     public void LogInAttempt(View view)
     {
-        System.err.println("LOG IN ATTEMPT!");
+        final Intent intent = new Intent(this, HomePage.class);
+        final Bundle b = new Bundle();
+        final EditText email = (EditText) findViewById(R.id.email);
+        final EditText pass = (EditText) findViewById(R.id.pass);
+        final TextView errMsg = (TextView) findViewById(R.id.errMsg);
+
+
+
+        if(!isEmpty(email) && !isEmpty(pass))
+        {
+            System.err.println("LOG IN ATTEMPT!");
+            //check parse data base for email and password
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+            query.whereEqualTo("email", email.getText().toString());
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                public void done(ParseObject parseObject, ParseException e) {
+                    if (e == null) {
+                        //user exists, access home page
+                        errMsg.setText("");
+                        String passWord = parseObject.getString ("pass");
+                        if (passWord.equals(pass.getText().toString())) {
+                            User u = new User(parseObject.getString("first_name"),
+                                              parseObject.getString("last_name"),
+                                              parseObject.getString("email"),
+                                              parseObject.getString("pass"));
+                            ((myApplication) getApplication()).setUser(u);
+                            startActivity(intent);
+
+                        } else {
+                            errMsg.setText("Invalid password!");
+                            errMsg.setTextColor(Color.RED);
+                        }
+                    } else {
+                        errMsg.setText("Email does not exist");
+                        errMsg.setTextColor(Color.RED);
+                    }
+                }
+            });
+        }
+        else
+        {
+            //TODO handle error
+        }
+
+
+
     }
+
+    protected boolean isEmpty(EditText t)
+    {
+        if(t.getText().toString().trim().length() == 0)
+            return true;
+        return false;
+
+    }
+
+
 }
+
+

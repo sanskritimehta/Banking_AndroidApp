@@ -1,6 +1,6 @@
 Welcome to our CSE 110 Android Banking Application!
 
-Team name: --TBD--
+Team name: The Rising Thumbs
 Quarter: Fall 2014
 University: UC San Diego
 

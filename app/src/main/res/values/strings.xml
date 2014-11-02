@@ -17,5 +17,6 @@
     <string name="email">Email</string>
     <string name="pass">Password</string>
     <string name="pass_confirm">Password (Confirm)</string>
+    <string name="title_activity_home_page">HomePage</string>
 
 </resources>
