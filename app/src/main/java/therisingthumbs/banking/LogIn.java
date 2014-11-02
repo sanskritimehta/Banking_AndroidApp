@@ -5,7 +5,9 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +27,8 @@ import com.parse.ParseQuery;
 public class LogIn extends Activity {
 
     public final static String EXTRA_MESSAGE = "therisingthumbs.banking.MESSAGE";
+    static int screenWidth, screenHeight; //vars to hold the size of the screen
+    static boolean isPortrait; //bool used to check if in portrait or landscape
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,29 @@ public class LogIn extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        /**
+         * This will hide the action bar.
+         */
+        ActionBar actionbar = getActionBar();
+        try{
+            actionbar.hide();
+        }
+        catch (NullPointerException e){
+            System.err.println("Null Pointer while hiding action bar");
+        }
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        if (screenWidth <= screenHeight)
+        {
+            isPortrait = true;
+        }
+        else
+            isPortrait = false;
     }
 
 
@@ -69,8 +96,23 @@ public class LogIn extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
+
+            TextView text = (TextView) rootView.findViewById(R.id.textView);
+
+            /**
+             * Set the objects on the screen based on the layout of the screen
+             */
+            if( isPortrait )
+                text.setPadding( 0, screenHeight/4, 0, 0);
+            else
+                text.setPadding( 0, screenHeight/5, 0, 0);
+
+
+
             return rootView;
         }
+
+
     }
 
     /**

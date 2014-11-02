@@ -3,11 +3,14 @@ package therisingthumbs.banking;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.SyncStateContract;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -30,6 +34,9 @@ import java.util.regex.Pattern;
 
 public class SignUp extends Activity {
 
+    static int screenWidth, screenHeight; //vars to hold the size of the screen
+    static boolean isPortrait; //bool used to check if in portrait or landscape
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +50,30 @@ public class SignUp extends Activity {
         // connect to parse
         Parse.initialize(this, "fVmX21jyCA3B7ffHgU8RCJQJCls6x9wJBSdx5KHY",
                                 "RxrZt3ldrgG0xilRZHrIZe5ViQQqC1OcxBl33DlK");
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        if (screenWidth <= screenHeight)
+        {
+            isPortrait = true;
+        }
+        else
+            isPortrait = false;
+
+        /**
+         * This will hide the action bar.
+         */
+        ActionBar actionbar = getActionBar();
+        try{
+            actionbar.hide();
+        }
+        catch (NullPointerException e){
+            System.err.println("Null Pointer while hiding action bar");
+        }
+
     }
 
 
@@ -77,6 +108,14 @@ public class SignUp extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
+
+            TextView text = (TextView) rootView.findViewById(R.id.textView);
+
+            /**
+             * Set the objects on the screen based on the layout of the screen
+             */
+
+
             return rootView;
         }
     }
@@ -87,6 +126,9 @@ public class SignUp extends Activity {
      */
     public void SignUpAttempt(View view)
     {
+
+
+
         final Intent intent = new Intent(this, HomePage.class);
         final Bundle b = new Bundle();
         System.err.println("SIGN UP ATTEMPT!");
@@ -111,52 +153,64 @@ public class SignUp extends Activity {
 
 
            //check for valid email and valid password
-           if ((emailValidator(email.getText().toString())) &&
-                        passwordValidator(pass.getText().toString())) {
+           if (emailValidator(email.getText().toString())) {
 
-                    //check passwords match
-                if (pass.getText().toString().equals(pass_confirm.getText().toString())) {
-                    //passwords match
-                    System.err.println("pass match!\nCheck Parse for user");
+               System.err.println("Valid email");
 
-                    // Check parse database to see if user exists (by email)
-                    // if does not, create new object. otherwise show error message
-                    User u = new User( first_name.getText().toString(),
-                                       last_name.getText().toString(),
-                                       email.getText().toString(),
-                                       pass.getText().toString() );
-                    u.printData();
+               //if (passwordValidator(pass.getText().toString())) {
 
-                    System.err.println("User in SignUp: " + u);
+                   //check passwords match
+                   if (pass.getText().toString().equals(pass_confirm.getText().toString())) {
+                       //passwords match
+                       System.err.println("pass match!\nCheck Parse for user");
 
-                    String e = u.addToDatabase();
-                    if (e == null) {
-                        //Add successful! start new activity with user object
-                        ((myApplication) this.getApplication()).setUser(u);
-                        System.err.println("Add Successful!");
-                        b.putParcelable("user_object", u);
-                        intent.putExtras(b);
+                       // Check parse database to see if user exists (by email)
+                       // if does not, create new object. otherwise show error message
+                       User u = new User(first_name.getText().toString(),
+                               last_name.getText().toString(),
+                               email.getText().toString(),
+                               pass.getText().toString());
+                       u.printData();
 
-                        startActivity(intent);
-                    }
-                    else {
-                        err.setText(e);
-                    }
+                       System.err.println("User in SignUp: " + u);
 
-                }
-                else
-                {
-                    //error passwords don't match
-                    err.setText("Passwords do not match!");
-                    err.setTextColor(Color.RED);
-                }
+                       String e = u.addToDatabase();
+                       System.err.println("e: " + e);
+                       if (e == null) {
+                           //Add successful! start new activity with user object
+                           ((myApplication) this.getApplication()).setUser(u);
+                           System.err.println("Add Successful!");
+                           b.putParcelable("user_object", u);
+                           intent.putExtras(b);
 
-            }
+                           startActivity(intent);
+                       } else {
+                           err.setText(e);
+
+                       }
+
+                   } else {
+                       //error passwords don't match
+                       err.setText("Passwords do not match!");
+                       err.setTextColor(Color.RED);
+
+                       Context context = getApplicationContext();
+                       int duration = Toast.LENGTH_SHORT;
+                       Toast toast = Toast.makeText(context, "Passwords don't match, ya bish.", duration);
+                       toast.show();
+                   }
+
+               //}
+           }
             else
             {
                 //not valid email format
                 err.setText("Email not in valid format (example@example.com)");
                 err.setTextColor(Color.RED);
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, "Email not in valid format (example@example.com)", duration);
+                toast.show();
             }
 
         }//end empty string check
@@ -165,6 +219,10 @@ public class SignUp extends Activity {
             // empty field(s)
             err.setText("Missing information. ALL fields are required");
             err.setTextColor(Color.RED);
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, "Missing information. ALL fields are required", duration);
+            toast.show();
         }
     }
 

@@ -62,6 +62,9 @@ public class User extends ParseObject implements Parcelable {
      *
      */
 
+    public void setRetString(String string) {
+        this.retString = string;
+    }
 
     public String addToDatabase() {
 
@@ -75,7 +78,8 @@ public class User extends ParseObject implements Parcelable {
             public void done(ParseObject parseObject, ParseException e) {
 
                 if (e == null) {
-                    u.retString = u.email + " already exists!";
+                    u.setRetString( u.email + " already exists!");
+                    System.err.println("USER.JAVA USER EXISTS");
 
                 } else {
                     //User does not exists, create account
@@ -84,11 +88,12 @@ public class User extends ParseObject implements Parcelable {
                     u.put("last_name", u.lastName);
                     u.put("pass", u.pass);
                     u.saveInBackground();
-                    u.retString = null;
+                    u.setRetString(null);
                 }
             }
         });
-        return u.retString;
+        System.err.println("RETSTRING:" + u.retString);
+        return retString;
     }
 
     public void printData() {
