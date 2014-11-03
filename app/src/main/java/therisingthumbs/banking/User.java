@@ -1,5 +1,7 @@
 package therisingthumbs.banking;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -23,7 +25,10 @@ public class User extends ParseObject implements Parcelable {
            lastName,
            email,
            pass,
+           accountTitle,
+           accountType,
            retString;
+
 
     /* default constructor */
     public User() {}
@@ -35,8 +40,11 @@ public class User extends ParseObject implements Parcelable {
         this.lastName = u.lastName;
         this.email = u.email;
         this.pass = u.pass;
+        this.accountTitle = u.accountTitle;
+        this.accountType = u.accountType;
     }
 
+    /* Other constructor */
     public User (String first, String last, String email, String pass) {
         this.firstName = first;
         this.lastName = last;
@@ -64,6 +72,74 @@ public class User extends ParseObject implements Parcelable {
 
     public void setRetString(String string) {
         this.retString = string;
+    }
+
+    /**
+     * Method used to deposit into an account in the database
+     */
+    public void deposit(double a, Activity act) {
+
+        final Activity activity = act;
+        final double amount = a;
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
+        query.whereEqualTo("email", this.email);
+        query.whereEqualTo("type", this.accountType);
+        query.whereEqualTo("title", this.accountTitle);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    // object exists
+                    double balance = Double.parseDouble(parseObject.get("balance").toString());
+                    double newAmount = balance + amount;
+                    parseObject.put("balance", newAmount);
+                    parseObject.saveInBackground();
+
+                    Intent intent = new Intent(activity, ManageAccount.class);
+                    activity.startActivity(intent);
+
+                } else {
+                    // YOU FUCKED UP
+                }
+            }
+        });
+    }
+
+    /**
+     * Method used to withdraw money from account
+     */
+    public void withdraw(double a, Activity act) {
+
+        final Activity activity = act;
+        final double amount = a;
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Account");
+        query.whereEqualTo("email", this.email);
+        query.whereEqualTo("type", this.accountType);
+        query.whereEqualTo("title", this.accountTitle);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    // object exists
+                    double balance = Double.parseDouble(parseObject.get("balance").toString());
+                    if (amount > balance) {
+                        //GO FUCK YOURSELF
+                    }
+                    else {
+                        // We're good :)
+                        double newAmount = balance - amount;
+                        parseObject.put("balance", newAmount);
+                        parseObject.saveInBackground();
+
+                        Intent intent = new Intent(activity, ManageAccount.class);
+                        activity.startActivity(intent);
+                    }
+                } else {
+                    // YOU FUCKED UP HARD
+
+                }
+            }
+        });
     }
 
     public String addToDatabase() {

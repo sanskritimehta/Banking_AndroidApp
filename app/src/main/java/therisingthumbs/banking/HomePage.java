@@ -5,13 +5,17 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
@@ -28,6 +32,8 @@ public class HomePage extends Activity {
                   userFirstName,
                   userLastName;
     static User u;
+    static int screenWidth, screenHeight; //vars to hold the size of the screen
+    static boolean isPortrait; //bool used to check if in portrait or landscape
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,29 +45,28 @@ public class HomePage extends Activity {
                     .commit();
         }
 
-        /*Intent intent = getIntent();
-        User user = (User) intent.getParcelableExtra("user_object");
-        if (user == null)
-           System.err.println("YA FUCKED UP");
-        else
-            System.err.println("well, maybe not");
-
-        userEmail = user.email;
-        userFirstName = user.firstName;
-        userLastName = user.lastName;
-
-        System.err.println("email passed: " + user);
-
-        user.printData();*/
-
         u = ((myApplication) this.getApplication()).getUser();
         System.err.println("HomePage: " + u);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
+        if (screenWidth <= screenHeight)
+        {
+            isPortrait = true;
+        }
+        else
+            isPortrait = false;
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home_page, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_page, menu);
         return true;
     }
 
@@ -72,7 +77,13 @@ public class HomePage extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            System.err.println("SETTINGS CLICKED");
             return true;
+        }
+
+        if (id == R.id.create) {
+            Intent intent = new Intent(this, CreateAccount.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -111,6 +122,15 @@ public class HomePage extends Activity {
 
             TextView text = (TextView) rootView.findViewById(R.id.userEmail);
             text.setText("Welcome, " + u.firstName);
+            text.setTextSize(20);
+            text.setPadding(0, screenHeight/8, 0, 0);
+
+            LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.linearLayout);
+            TextView newText = new TextView(rootView.getContext());
+
+            newText.setText("TESTING");
+
+            layout.addView(newText);
 
             return rootView;
         }
