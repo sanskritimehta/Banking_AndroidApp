@@ -12,14 +12,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import java.util.List;
 
 
 public class HomePage extends Activity {
@@ -29,15 +36,49 @@ public class HomePage extends Activity {
                   userLastName;
     static User u;
 
+    static String[] names ={"David","Wendy","David","Adam","Blair", "Sanskriti","Julio","Vyom"};
+
+    //static ListAdapter accountAdapter = new accountAdapter(this,names);
+
+    //static ListView accList = (ListView)findViewById(R.id.accountList);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-        if (savedInstanceState == null) {
+        /*if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
-        }
+        }*/
+
+        u = ((myApplication) this.getApplication()).getUser();
+        System.err.println("HomePage: " + u);
+
+        List<ParseObject> accounts;
+
+        ParseQuery<ParseObject> account = ParseQuery.getQuery("Account");
+        account.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> accList, ParseException e) {
+                //account(s) found
+                if (e == null)
+                {
+                    System.out.println("Found "+accList.size());
+
+                } else
+                {
+                    System.out.println("ERROR Finding Accounts");
+                }
+            }
+        });
+
+        /*String[] names ={"David","Wendy","David","Adam","Blair", "Sanskriti","Julio","Vyom"};
+
+        ListAdapter accountAdapter = new accountAdapter(this,names);
+
+        ListView accList = (ListView)findViewById(R.id.accountList);*/
+
+        //accList.setAdapter(accountAdapter);
 
         /*Intent intent = getIntent();
         User user = (User) intent.getParcelableExtra("user_object");
@@ -54,8 +95,8 @@ public class HomePage extends Activity {
 
         user.printData();*/
 
-        u = ((myApplication) this.getApplication()).getUser();
-        System.err.println("HomePage: " + u);
+
+
     }
 
     @Override
@@ -80,7 +121,7 @@ public class HomePage extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public class PlaceholderFragment extends Fragment {
 
         public PlaceholderFragment() {
         }
@@ -88,10 +129,16 @@ public class HomePage extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            final View rootView = inflater.inflate(R.layout.fragment_home_page, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_home_page, container, false);
             /**
              * Initialize global (file scope) user information
-             */
+             **/
+            accountAdapter accAdapter = new accountAdapter( getActivity(), names);
+
+            ListView accList = (ListView)rootView.findViewById(R.id.accountList);
+
+            accList.setAdapter(accAdapter);
+
             ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
             query.whereEqualTo("email", userEmail);
             query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -100,8 +147,8 @@ public class HomePage extends Activity {
                         userFirstName = parseObject.getString("first_name");
                         userLastName = parseObject.getString("last_name");
 
-                        TextView text = (TextView) rootView.findViewById(R.id.userEmail);
-                        text.setText("Welcome, " + userFirstName);
+                        //TextView text = (TextView) rootView.findViewById(R.id.userEmail);
+                        //text.setText("Welcome, " + userFirstName);
 
                     } else {
                         // error reading parse database!
@@ -109,8 +156,8 @@ public class HomePage extends Activity {
                 }
             });
 
-            TextView text = (TextView) rootView.findViewById(R.id.userEmail);
-            text.setText("Welcome, " + u.firstName);
+            /*TextView text = (TextView) rootView.findViewById(R.id.userEmail);
+            text.setText("Welcome, " + u.firstName);*/
 
             return rootView;
         }
