@@ -73,7 +73,7 @@ public class accountAdapter extends BaseAdapter{
         //set the text in each TextView
         accTextView.setText(accountTitle);
         typeTextView.setText(accountType);
-        balTextView.setText(balance.toString());
+        balTextView.setText("$"+balance.toString());
 
         return accView;
 

@@ -39,6 +39,7 @@
         <activity
             android:name=".HomePage"
             android:label="@string/title_activity_home_page"
+            android:screenOrientation="portrait"
             android:parentActivityName=".SignUp" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
