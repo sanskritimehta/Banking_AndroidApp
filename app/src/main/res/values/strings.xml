@@ -18,5 +18,14 @@
     <string name="pass">Password</string>
     <string name="pass_confirm">Password (Confirm)</string>
     <string name="title_activity_home_page">HomePage</string>
+    <string name="title_activity_create_account">CreateAccount</string>
+
+    <!-- Create Account spinner list -->
+    <string-array name="create_spinner">
+        <item>Checking</item>
+        <item>Savings</item>
+    </string-array>
+
+    <string name="title_activity_manage_account">ManageAccount</string>
 
 </resources>
